@@ -41,8 +41,7 @@ private:
 
    // GUI components
    GUI::MenuBar      menu_bar{this};
-   GUI::TextButton   play_btn{  &menu_bar, 'P', "Play"};
-   GUI::TextButton   stop_btn{  &menu_bar, 'S', "Stop"};
+   GUI::TextButton   mute_btn{  &menu_bar, 'm', "Mute"};
    GUI::TextButton   reset_btn{ &menu_bar, 'R', "Reset"};
    GUI::TextButton   sine_btn{  &menu_bar, 's', "Sine"};
    GUI::TextButton   square_btn{&menu_bar, 'U', "Square"};
@@ -50,6 +49,7 @@ private:
    GUI::TextButton   pulse_btn{ &menu_bar, 'p', "Pulse"};
    Scope             scope{this};
    GUI::Row          controls{this};
+   bool              mute{true};
 
    struct CoefControl
    {
@@ -77,8 +77,14 @@ private:
    {
       switch(code_)
       {
-      case 'P': monitor.play();   break;
-      case 'S': monitor.stop();   break;
+      case 'm':
+         mute = !mute;
+         mute_btn.setSelect(mute);
+         if (mute)
+            monitor.stop();
+         else
+            monitor.play();
+         break;
 
       case 'R': setSliders([](unsigned n) -> double { return 0.0;                 }); break;
       case 's': setSliders([](unsigned n) -> double { return n == 1 ? 1.0 : 0.0;  }); break;
@@ -105,6 +111,7 @@ public:
       : GUI::App("Fourier Synthesis", &GUI::font_teletext18)
    {
       setBorderAndGap(8);
+      mute_btn.setSelect(mute);
 
       scope.setSize(1024, 256);
       scope.setForegroundColour(STB::GREEN);

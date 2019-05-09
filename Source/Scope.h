@@ -25,8 +25,6 @@
 
 #include "GUI/GUI.h"
 
-#include <vector>
-
 class Scope
    : public GUI::Widget
    , public GUI::ColourPair
