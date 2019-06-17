@@ -117,7 +117,7 @@ public:
       scope.setForegroundColour(STB::GREEN);
       scope.setBackgroundColour(STB::BLACK);
 
-      size_t n;
+      size_t n = 0;
       scope.setTable(osc.getTable(n), n);
 
       for(size_t n=1; n<=HARMONICS; n++)
