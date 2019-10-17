@@ -41,15 +41,14 @@ private:
    }
 
 public:
-   AdditiveApp(int argc, const char* argv[])
+   AdditiveApp()
       : ConsoleApp(PROGRAM, DESCRIPTION, LINK, AUTHOR, COPYRIGHT_YEAR)
    {
-      parseArgsAndStart(argc, argv);
    }
 };
 
 
 int main(int argc, const char* argv[])
 {
-   AdditiveApp(argc, argv);
+   AdditiveApp().parseArgsAndStart(argc, argv);
 }
