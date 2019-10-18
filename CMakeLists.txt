@@ -20,16 +20,19 @@
 #  SOFTWARE.
 #-------------------------------------------------------------------------------
 
-set(app         Additive)
-set(author      "John D. Haughton")
-set(version     0.1.0)
+cmake_minimum_required(VERSION 3.11.4)
+
+project(Additive
+        VERSION   0.1.0
+        LANGUAGES C CXX ASM)
+
+set(author  "John D. Haughton")
 
 set(source  Source/additive.cpp)
 set(binary  additive)
 
 #-------------------------------------------------------------------------------
 
-cmake_minimum_required(VERSION 3.11.4)
 include(Platform/build.cmake NO_POLICY_SCOPE)
 
 #-------------------------------------------------------------------------------
