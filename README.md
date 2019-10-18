@@ -10,3 +10,12 @@ A demonstration of additive synthesis.
 
 See the [Platform](https://github.com/AnotherJohnH/Platform) project for supported platforms
 and coding style.
+
+## How to build
+
+Build using cmake.
+
+mkdir build
+cd build
+cmake ..
+make

@@ -21,12 +21,13 @@
 #-------------------------------------------------------------------------------
 
 cmake_minimum_required(VERSION 3.11.4)
+cmake_policy(SET CMP0048 NEW) # Humph! don't like having to do this
 
 project(Additive
-        VERSION   0.1.0
+        VERSION   0.0.0
         LANGUAGES C CXX ASM)
 
-set(author  "John D. Haughton")
+set(author  John D. Haughton)
 
 set(source  Source/additive.cpp)
 set(binary  additive)
