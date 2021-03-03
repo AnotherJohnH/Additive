@@ -4,7 +4,7 @@ A demonstration of additive synthesis.
 
 ## Status
 
-[![Build Status](https://travis-ci.org/AnotherJohnH/Additive.svg?branch=master)](https://travis-ci.org/AnotherJohnH/Additive)
+[![Build Status](https://github.com/AnotherJohnH/Additive/actions/workflows/build_on_push.yml/badge.svg)](https://github.com/AnotherJohnH/Additive/actions/workflows/build_on_push.yml)
 
 ## Portability and style
 
