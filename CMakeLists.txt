@@ -22,18 +22,19 @@
 
 cmake_minimum_required(VERSION 3.11.4)
 
+set(CMAKE_PROJECT_VERSION 0.1.0)
+
+include(Platform/build.cmake NO_POLICY_SCOPE)
+
+#-------------------------------------------------------------------------------
+
 project(Additive
-        VERSION   0.0.0
         LANGUAGES C CXX ASM)
 
 set(author  John D. Haughton)
 
 set(source  Source/additive.cpp)
 set(binary  additive)
-
-#-------------------------------------------------------------------------------
-
-include(Platform/build.cmake NO_POLICY_SCOPE)
 
 #-------------------------------------------------------------------------------
 
