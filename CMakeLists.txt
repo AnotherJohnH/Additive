@@ -23,21 +23,14 @@
 cmake_minimum_required(VERSION 3.11.4)
 
 project(Additive
-        VERSION 0.1.0
-        LANGUAGES C CXX ASM)
+        LANGUAGES C CXX ASM
+        VERSION 0.1.0)
 
-include(Platform/build.cmake NO_POLICY_SCOPE)
-
-#-------------------------------------------------------------------------------
-
-set(author  John D. Haughton)
-
-set(source  Source/additive.cpp)
-set(binary  additive)
+include(Platform/config.cmake)
 
 #-------------------------------------------------------------------------------
 
-add_executable(${binary} ${source})
-target_link_libraries(${binary} ${PLT_libs})
+add_executable(additive Source/additive.cpp)
+target_link_libraries(additive PLT)
 
-install(TARGETS ${binary} RUNTIME DESTINATION bin)
+install(TARGETS additive RUNTIME DESTINATION bin)
