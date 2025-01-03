@@ -26,6 +26,8 @@ project(Additive
         LANGUAGES C CXX ASM
         VERSION 0.1.0)
 
+include(CTest)
+
 add_subdirectory(Platform)
 
 add_executable(additive Source/additive.cpp)
