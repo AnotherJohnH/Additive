@@ -20,17 +20,13 @@
 #  SOFTWARE.
 #-------------------------------------------------------------------------------
 
-cmake_minimum_required(VERSION 3.11.4)
+cmake_minimum_required(VERSION 3.19.1)
 
 project(Additive
         LANGUAGES C CXX ASM
         VERSION 0.1.0)
 
-include(Platform/config.cmake)
-
-#-------------------------------------------------------------------------------
+add_subdirectory(Platform)
 
 add_executable(additive Source/additive.cpp)
-target_link_libraries(additive PLT)
-
-install(TARGETS additive RUNTIME DESTINATION bin)
+target_link_libraries(additive PLT GUI STB)
