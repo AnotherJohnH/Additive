@@ -20,15 +20,14 @@
 #  SOFTWARE.
 #-------------------------------------------------------------------------------
 
-cmake_minimum_required(VERSION 3.19.1)
+cmake_minimum_required(VERSION 3.20)
 
 project(Additive
-        LANGUAGES C CXX ASM
-        VERSION 0.1.0)
-
-include(CTest)
+        LANGUAGES CXX
+        VERSION 0.2)
 
 add_subdirectory(Platform)
 
 add_executable(additive Source/additive.cpp)
-target_link_libraries(additive GUI STB)
+
+target_link_libraries(additive GUI)
