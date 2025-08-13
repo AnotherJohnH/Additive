@@ -27,23 +27,23 @@
 
 #define  PROGRAM         "Additive"
 #define  DESCRIPTION     "Demonstrate additive synthesis"
-#define  LINK            "https://github.com/AnotherJohnH/"
+#define  LINK            "https://github.com/AnotherJohnH/Additive"
 #define  COPYRIGHT_YEAR  "2016"
 #define  AUTHOR          "John D. Haughton"
 
 
 class AdditiveApp : public STB::ConsoleApp
 {
-private:
-   virtual int startConsoleApp() override
-   {
-      return AdditiveGUI<32>().eventLoop();
-   }
-
 public:
    AdditiveApp()
       : ConsoleApp(PROGRAM, DESCRIPTION, LINK, AUTHOR, COPYRIGHT_YEAR)
    {
+   }
+
+private:
+   virtual int startConsoleApp() override
+   {
+      return AdditiveGUI<32>().eventLoop();
    }
 };
 

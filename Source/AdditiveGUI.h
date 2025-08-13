@@ -27,41 +27,53 @@
 
 #include "SND/SND.h"
 #include "GUI/GUI.h"
+#include "PLT/Midi.h"
 
 #include "Scope.h"
 
 
 template <unsigned HARMONICS>
-class AdditiveGUI : public GUI::App
+class AdditiveGUI
+   : public GUI::App
+   , public PLT::MIDI::In
 {
-private:
-   // Audio components
-   SND::AdditiveOsc<HARMONICS>  osc{440.0};
-   SND::Monitor                 monitor{};
 
-   // GUI components
-   GUI::MenuBar      menu_bar{this};
-   GUI::TextButton   mute_btn{  &menu_bar, 'm', "Mute"};
-   GUI::TextButton   reset_btn{ &menu_bar, 'R', "Reset"};
-   GUI::TextButton   sine_btn{  &menu_bar, 's', "Sine"};
-   GUI::TextButton   square_btn{&menu_bar, 'U', "Square"};
-   GUI::TextButton   ramp_btn{  &menu_bar, 'V', "Ramp"};
-   GUI::TextButton   pulse_btn{ &menu_bar, 'p', "Pulse"};
-   Scope             scope{this};
-   GUI::Row          controls{this};
-   bool              mute{true};
-
-   struct CoefControl
+public:
+   AdditiveGUI()
+      : GUI::App("Fourier Synthesis", &GUI::font_teletext18)
    {
-      GUI::Col      col{};
-      std::string   label{};
-      GUI::Text     text{};
-      GUI::Slider   slider{400};
-      GUI::Field<4> field;
-   };
+      setBorderAndGap(8);
+      mute_btn.setSelect(mute);
 
-   CoefControl coef_table[HARMONICS];
+      scope.setSize(1024, 256);
+      scope.setForegroundColour(STB::GREEN);
+      scope.setBackgroundColour(STB::BLACK);
 
+      size_t n = 0;
+      scope.setTable(osc.getTable(n), n);
+
+      for(size_t n=1; n<=HARMONICS; n++)
+      {
+         size_t i = n - 1;
+         CoefControl& coef = coef_table[i];
+
+         coef.label = std::to_string(n);
+         coef.col.setParent(&controls);
+         coef.text.setParent(&coef.col);
+         coef.text.setText(coef.label.c_str());
+         coef.text.setAlign(GUI::Align::CENTER);
+         coef.slider.setParent(&coef.col);
+         coef.slider.setCode(n);
+         coef.field.setParent(&coef.col);
+         coef.field.setValue("   0");
+      }
+
+      // setSliders([](unsigned n) -> double { return 0.0; });
+
+      monitor.in = osc;
+   }
+
+private:
    //! Update all the sliders
    void setSliders(std::function<double(unsigned)> func)
    {
@@ -106,40 +118,56 @@ private:
       }
    }
 
-public:
-   AdditiveGUI()
-      : GUI::App("Fourier Synthesis", &GUI::font_teletext18)
+   //! Handle MIDI control messages
+   void controlChange(uint8_t channel, uint8_t index, uint8_t value) override
    {
-      setBorderAndGap(8);
-      mute_btn.setSelect(mute);
+      // printf("#%u = %u\n", index, value);
 
-      scope.setSize(1024, 256);
-      scope.setForegroundColour(STB::GREEN);
-      scope.setBackgroundColour(STB::BLACK);
-
-      size_t n = 0;
-      scope.setTable(osc.getTable(n), n);
-
-      for(size_t n=1; n<=HARMONICS; n++)
+      // Mapping for AKAI MIDImix
+      static unsigned coefToCtrl[32] =
       {
-         size_t i = n - 1;
-         CoefControl& coef = coef_table[i];
+         19, 23, 27, 31, 49, 53, 57, 61, 62,  // Faders
+         16, 20, 24, 28, 46, 50, 54, 58,      // 1st row knobs
+         17, 21, 25, 29, 47, 51, 55, 59,      // 2nd row knobs
+         18, 22, 26, 30, 48, 52, 56           // 3rd rom knobs
+      };
 
-         coef.label = std::to_string(n);
-         coef.col.setParent(&controls);
-         coef.text.setParent(&coef.col);
-         coef.text.setText(coef.label.c_str());
-         coef.text.setAlign(GUI::Align::CENTER);
-         coef.slider.setParent(&coef.col);
-         coef.slider.setCode(n);
-         coef.field.setParent(&coef.col);
-         coef.field.setValue("   0");
+      for(unsigned i = 0; i < HARMONICS; ++i)
+      {
+         if (coefToCtrl[i] == index)
+         {
+            coef_table[i].slider.setValue(value / 127.0);
+            break;
+         }
       }
-
-      // setSliders([](unsigned n) -> double { return 0.0; });
-
-      monitor.in = osc;
    }
+
+   // GUI components
+   GUI::MenuBar      menu_bar{this};
+   GUI::TextButton   mute_btn{  &menu_bar, 'm', "Mute"};
+   GUI::TextButton   reset_btn{ &menu_bar, 'R', "Reset"};
+   GUI::TextButton   sine_btn{  &menu_bar, 's', "Sine"};
+   GUI::TextButton   square_btn{&menu_bar, 'U', "Square"};
+   GUI::TextButton   ramp_btn{  &menu_bar, 'V', "Ramp"};
+   GUI::TextButton   pulse_btn{ &menu_bar, 'p', "Pulse"};
+   Scope             scope{this};
+   GUI::Row          controls{this};
+   bool              mute{true};
+
+   struct CoefControl
+   {
+      GUI::Col      col{};
+      std::string   label{};
+      GUI::Text     text{};
+      GUI::Slider   slider{400};
+      GUI::Field<4> field;
+   };
+
+   CoefControl coef_table[HARMONICS];
+
+   // Audio components
+   SND::AdditiveOsc<HARMONICS>  osc{440.0};
+   SND::Monitor                 monitor{};
 };
 
 #endif
