@@ -53,11 +53,11 @@ private:
 
    struct CoefControl
    {
-      GUI::Col       col;
-      std::string    label;
-      GUI::Text      text;
-      GUI::Slider    slider;
-      GUI::Field<4>  field;
+      GUI::Col      col{};
+      std::string   label{};
+      GUI::Text     text{};
+      GUI::Slider   slider{400};
+      GUI::Field<4> field;
    };
 
    CoefControl coef_table[HARMONICS];
@@ -126,14 +126,17 @@ public:
          CoefControl& coef = coef_table[i];
 
          coef.label = std::to_string(n);
-         coef.col.init(&controls);
-         coef.text.init(&coef.col, coef.label.c_str());
+         coef.col.setParent(&controls);
+         coef.text.setParent(&coef.col);
+         coef.text.setText(coef.label.c_str());
          coef.text.setAlign(GUI::Align::CENTER);
-         coef.slider.init(&coef.col, n, 400);
-         coef.field.init(&coef.col, 0, " 100");
+         coef.slider.setParent(&coef.col);
+         coef.slider.setCode(n);
+         coef.field.setParent(&coef.col);
+         coef.field.setValue("   0");
       }
 
-      setSliders([](unsigned n) -> double { return 0.0; });
+      // setSliders([](unsigned n) -> double { return 0.0; });
 
       monitor.in = osc;
    }

@@ -31,4 +31,4 @@ include(CTest)
 add_subdirectory(Platform)
 
 add_executable(additive Source/additive.cpp)
-target_link_libraries(additive PLT GUI STB)
+target_link_libraries(additive GUI STB)
